@@ -73,11 +73,10 @@ cd Catelingo
 
 # Run the test suite (reproduces all paper examples)
 python -m unittest discover tests
+--
 
----
 
-
-## Implementation Overview
+---## Implementation Overview
 
 This repository contains a **minimal toy implementation** designed to demonstrate feasibility and clarity.
 
