@@ -234,13 +234,14 @@ It is **not** intended as a production-ready semantic parser.
 
 If you use this work, please cite:
 
+```
 @article{miya2025catelingo,
 title={Catelingo: Constraint-Based Semantic Validity Verification for Language Models},
 author={Miya, Shinobu},
 year={2025},
 journal={arXiv preprint}
 }
-
+```
 
 ---
 
