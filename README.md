@@ -72,7 +72,7 @@ git clone https://github.com/ShinobuMiya/Catelingo.git
 cd Catelingo
 
 # Run the test suite (reproduces all paper examples)
-python -m unittest discover tests
+python -m pytest
 ```
 
 ---
