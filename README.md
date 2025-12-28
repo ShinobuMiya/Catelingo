@@ -204,16 +204,16 @@ It targets semantic failures that **do not manifest as reasoning or factual erro
 
 ## Repository Structure
 
-.
-├── src/
-│   ├── engine.py       # Constraint propagation logic (AC-3 like)
-│   ├── models.py       # Data structures (Sense, Constraint, etc.)
-│   └── loader.py       # YAML/JSON loader
-├── scenarios/          # Input examples (JSON)
-├── data/               # Lexicon and Constraint definitions
-├── tests/              # Reproduction scripts
-├── README.md
-└── LICENSE
+.  
+├── src/  
+│   ├── engine.py       # Constraint propagation logic (AC-3 like)  
+│   ├── models.py       # Data structures (Sense, Constraint, etc.)  
+│   └── loader.py       # YAML/JSON loader  
+├── scenarios/          # Input examples (JSON)  
+├── data/               # Lexicon and Constraint definitions  
+├── tests/              # Reproduction scripts  
+├── README.md  
+└── LICENSE  
 
 
 ---
