@@ -1,0 +1,51 @@
+meta:
+  version: "0.1.0"
+  language: "en"
+  description: >
+    Toy-only parser/extractor hints for reproducing paper examples.
+    This file is NOT part of Catelingo validation logic.
+    It maps surface patterns into input predicate-argument structures.
+
+rules:
+  - id: RULE_BUILT_IN_YEAR
+    intent: "extract_construct_time"
+    match:
+      pattern: ["built", "in", "{YEAR}"]
+    emit:
+      predicate: "construct"
+      args:
+        theme: "$SUBJECT"
+        time: {literal: "$YEAR", sense: "NUM::year::01"}
+
+  - id: RULE_TO_COMM_EVENT
+    intent: "extract_commemorate_event"
+    match:
+      pattern: ["to", "commemorate", "{EVENT}"]
+    emit:
+      predicate: "commemorate"
+      args:
+        carrier: "$SUBJECT"
+        event: "$EVENT"
+        # IMPORTANT: event_time must be supplied by the upstream system (input JSON),
+        # not by Catelingo. If missing, validator should return UNKNOWN.
+        event_time: "$EVENT_TIME"
+
+  - id: RULE_PROBABILITY_IS_PERCENT
+    intent: "extract_probability_percent"
+    match:
+      pattern: ["probability", "of", "*", "is", "{PERCENT_NUMBER}%"]
+    emit:
+      predicate: "probability_value"
+      args:
+        value: {literal: "$PERCENT_NUMBER"}
+        unit: {literal: "percent"}
+
+  - id: RULE_AUTUMN_MAKES_CHEEK_LIKE_APPLE
+    intent: "extract_metaphor_toy"
+    match:
+      pattern: ["Autumn", "makes", "*", "cheek", "like", "an", "apple"]
+    emit:
+      predicate: "make_turn_into"
+      args:
+        patient: "$CHEEK"
+        result: "$APPLE"

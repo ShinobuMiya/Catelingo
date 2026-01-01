@@ -1,0 +1,412 @@
+meta:
+  version: "0.2.0"
+  language: "en"
+  profile: "English/general"
+  description: >
+    Toy constraint lexicon for Catelingo (validator only).
+    This file defines senses, types, and constraint logic.
+    It contains no factual knowledge (e.g., no stored dates such as "WWI=1914").
+    All concrete time values must be provided by the input structure.
+  max_senses_per_token: 10
+
+# -------------------------
+# Type system (minimal, with multi-isa)
+# -------------------------
+types:
+  ENTITY: {isa: []}
+  ABSTRACT: {isa: [ENTITY]}
+  CONCRETE: {isa: [ENTITY]}
+
+  PERSON: {isa: [CONCRETE]}
+  ORGANIZATION: {isa: [CONCRETE]}
+
+  ARTIFACT: {isa: [CONCRETE]}
+  EVENT: {isa: [ABSTRACT]}
+
+  NUMBER: {isa: [ABSTRACT]}
+  TIMEPOINT: {isa: [ABSTRACT]}
+
+  GOVERNMENT_SYSTEM: {isa: [ABSTRACT]}
+  MONARCHY: {isa: [GOVERNMENT_SYSTEM]}
+
+  VEHICLE: {isa: [CONCRETE]}
+  SPACESHIP: {isa: [VEHICLE, ARTIFACT]}   # multi-isa example
+
+  FOOD: {isa: [CONCRETE]}
+  FRUIT: {isa: [FOOD]}
+  BANANA: {isa: [FRUIT]}
+
+  BODY_PART: {isa: [CONCRETE]}
+  CHEEK: {isa: [BODY_PART]}
+
+  COLOR_THING: {isa: [ABSTRACT]}
+  RED_THING: {isa: [COLOR_THING]}
+
+# -------------------------
+# Units (explicit)
+# -------------------------
+units:
+  probability:
+    allowed: ["unit_interval", "percent"]
+    normalize_to: "unit_interval"
+    conversions:
+      percent_to_unit_interval: "x / 100.0"
+
+  percent:
+    allowed: ["percent"]
+    normalize_to: "percent"
+    conversions: {}
+
+# -------------------------
+# Profile-level constraints (universal logic only)
+# -------------------------
+profile_constraints:
+  temporal:
+    - id: TEMP_CONSTRUCT_AFTER_EVENT
+      note: >
+        Universal constraint: an artifact cannot be constructed before the event it commemorates.
+        No event dates are stored here; the input must supply time variables.
+      when:
+        all:
+          - predicate: "construct"
+            args: {theme: "?X", time: "?T_construct"}
+          - predicate: "commemorate"
+            args: {carrier: "?X", event: "?E", event_time: "?T_event"}
+      must_hold:
+        ge: ["?T_construct", "?T_event"]
+
+  numerical:
+    - id: RANGE_PROBABILITY_0_1
+      note: >
+        Probability must lie within [0,1] after unit normalization.
+        If unit is missing/invalid, return UNKNOWN rather than UNSAT.
+      when:
+        all:
+          - predicate: "probability_value"
+            args: {value: "?P", unit: "?U"}
+      must_hold:
+        unit_allowed: ["?U", "probability.allowed"]     # allowed units for probability
+        normalize: ["?P", "?U", "probability.normalize_to", "?P_norm"]
+        in_range: ["?P_norm", 0.0, 1.0]
+
+    - id: RANGE_PERCENT_0_100
+      when:
+        all:
+          - predicate: "percent_value"
+            args: {value: "?Q", unit: "?U"}
+      must_hold:
+        unit_allowed: ["?U", "percent.allowed"]
+        in_range: ["?Q", 0.0, 100.0]
+  
+  geometry:
+    - id: EUCLIDEAN_TRIANGLE_ANGLE_SUM
+      note: >
+        Applies only when the input declares Euclidean geometry.
+        This is an axiom-level constraint, not factual knowledge.
+      when:
+        all:
+          - predicate: "assumption"
+            args: {name: "geometry", value: "euclidean"}
+          - predicate: "triangle_angle_sum"
+            args: {triangle: "?T", sum_deg: "?S"}
+      must_hold:
+        eq: ["?S", 180.0]
+
+  semantic:
+    - id: BIOLOGICAL_INCOMPATIBILITY
+      note: >
+        Paper example: 'monarchy' presupposes a PERSON as its 'of' target.
+      when:
+        predicate: monarchy
+        args: {of: "?O"}
+      must_hold:
+        - op: type_is
+          args: ["?O", "PERSON"]
+
+    - id: AGENT_INTENTIONALITY
+      note: >
+        Paper example: 'dance' requires an intentional agent (PERSON).
+      when:
+        predicate: dance
+        args: {agent: "?A"}
+      must_hold:
+        - op: type_is
+          args: ["?A", "PERSON"]
+
+    - id: CATEGORY_MISMATCH
+      note: >
+        Paper example: literal similarity 'like_similarity' is only licensed inside the ARTIFACT domain.
+      when:
+        predicate: like_similarity
+        args: {x: "?X", y: "?Y"}
+      must_hold:
+        - op: type_is
+          args: ["?X", "ARTIFACT"]
+        - op: type_is
+          args: ["?Y", "ARTIFACT"]
+
+    - id: MAKE_TURN_INTO_CHEEK_RESULT_RED_THING
+      note: >
+        Metaphor demo trigger: if something is made/turned into for a CHEEK,
+        the resulting entity must be a RED_THING. Without relaxation, apple(FRUIT) clashes.
+      when:
+        all:
+          - predicate: "cheek"
+            args: {entity: "?C"}
+          - predicate: "make_turn_into"
+            args: {patient: "?C", result: "?R"}
+      must_hold:
+        - op: type_is
+          args: ["?R", "RED_THING"]
+
+# -------------------------
+# Relaxation rules (metaphor allowance)
+# -------------------------
+relaxation_rules:
+  - id: DEG_FRUIT_TO_RED_THING_APPLE_ONLY
+    enabled: true
+    mode: "lexeme_to_type"   # supports future: "type_to_type"
+    from_lexeme: "apple"
+    from_type: "FRUIT"
+    to_type: "RED_THING"
+    note: >
+      Toy-only: allow 'apple' to degenerate into RED_THING for cheek-metaphor.
+      Future: generalize to type_to_type rules (e.g., FRUIT -> COLOR_THING) with safeguards.
+
+# -------------------------
+# Lexical senses
+# Sense IDs are stable and decoupled from predicate names.
+# Format: <POS>::<lemma>::<sense_no>
+# -------------------------
+senses:
+
+  # ---- Nouns ----
+  - sense_id: "N::eiffel_tower::01"
+    lemma: "eiffel_tower"
+    surface_forms: ["Eiffel Tower", "the Eiffel Tower", "Eiffel_Tower"]
+    predicate: "entity"
+    returns: "ARTIFACT"
+    constraints: []
+    tags: ["general"]
+
+  - sense_id: "N::world_war_i::01"
+    lemma: "world_war_i"
+    surface_forms: ["World War I", "WWI", "First World War"]
+    predicate: "event"
+    returns: "EVENT"
+    constraints: []
+    tags: ["general"]
+    note: >
+      No factual date is stored. If a time is needed, it must be provided by the input
+      as a variable such as event_time.
+
+  - sense_id: "N::banana::01"
+    lemma: "banana"
+    surface_forms: ["banana", "bananas"]
+    predicate: "banana"
+    returns: "BANANA"
+    constraints: []
+    tags: ["general"]
+
+  - sense_id: "N::monarchy::01"
+    lemma: "monarchy"
+    surface_forms: ["monarchy"]
+    predicate: "monarchy"
+    returns: "MONARCHY"
+    constraints: []
+    tags: ["general"]
+
+  - sense_id: "N::spaceship::01"
+    lemma: "spaceship"
+    surface_forms: ["spaceship", "spacecraft"]
+    predicate: "spaceship"
+    returns: "SPACESHIP"
+    constraints: []
+    tags: ["general"]
+
+  - sense_id: "N::cheek::01"
+    lemma: "cheek"
+    surface_forms: ["cheek", "cheeks"]
+    predicate: "cheek"
+    returns: "CHEEK"
+    constraints: []
+    tags: ["general"]
+
+  - sense_id: "N::apple::01"
+    lemma: "apple"
+    surface_forms: ["apple", "apples"]
+    predicate: "apple"
+    returns: "FRUIT"
+    constraints: []
+    tags: ["general"]
+
+  - sense_id: "N::autumn::01"
+    lemma: "autumn"
+    surface_forms: ["Autumn", "autumn", "Fall", "fall"]
+    predicate: "autumn"
+    returns: "TIMEPOINT"
+    constraints: []
+    tags: ["general"]
+
+  # ---- Numerics ----
+  - sense_id: "NUM::year::01"
+    lemma: "year"
+    surface_forms: []  # parser supplies literals; not enumerated here
+    predicate: "timepoint"
+    returns: "TIMEPOINT"
+    constraints: []
+    tags: ["general"]
+
+  - sense_id: "NUM::probability::01"
+    lemma: "probability"
+    surface_forms: []
+    predicate: "probability_value"
+    returns: "PROBABILITY"
+    roles:
+      value: {type: "NUMBER"}
+      unit: {type: "ABSTRACT"}     # unit is a symbol-like value (e.g., "percent", "unit_interval")
+    constraints:
+      - id: "PROB_VALUE_PRESENT"
+        must_hold:
+          present: ["value", "unit"]
+    tags: ["general"]
+
+  - sense_id: "NUM::percent::01"
+    lemma: "percent"
+    surface_forms: []
+    predicate: "percent_value"
+    returns: "NUMBER"
+    roles:
+      value: {type: "NUMBER"}
+      unit: {type: "ABSTRACT"}     # must be "percent"
+    constraints:
+      - id: "PERCENT_VALUE_PRESENT"
+        must_hold:
+          present: ["value", "unit"]
+    tags: ["general"]
+
+  # ---- Verbs / relations ----
+  - sense_id: "V::build::01"
+    lemma: "build"
+    surface_forms: ["build", "built", "construct", "constructed"]
+    predicate: "construct"
+    returns: "EVENT"
+    roles:
+      agent: {type: "ENTITY", optional: true}
+      theme: {type: "ARTIFACT"}
+      time:  {type: "TIMEPOINT", optional: true}
+    constraints:
+      - id: "BUILD_THEME_ARTIFACT"
+        must_hold:
+          type_is: ["theme", "ARTIFACT"]
+    tags: ["general"]
+
+  - sense_id: "V::commemorate::01"
+    lemma: "commemorate"
+    surface_forms: ["commemorate", "commemorated"]
+    predicate: "commemorate"
+    returns: "EVENT"
+    roles:
+      # NOTE: 'carrier' instead of 'agent' to avoid implying intentionality.
+      carrier: {type: "ARTIFACT"}
+      event: {type: "EVENT"}
+      event_time: {type: "TIMEPOINT", optional: true}
+    constraints:
+      - id: "COMMEM_CARRIER_ARTIFACT"
+        must_hold:
+          type_is: ["carrier", "ARTIFACT"]
+      - id: "COMMEM_EVENT_EVENT"
+        must_hold:
+          type_is: ["event", "EVENT"]
+    tags: ["general"]
+    note: >
+      This role naming is intentional: many English constructions use inanimate subjects
+      (e.g., "The monument commemorates WWI"). We model this as carrier rather than agent.
+
+  # make: 3 senses (create / build / turn_into)
+  - sense_id: "V::make::01"
+    lemma: "make"
+    surface_forms: ["make", "makes", "made"]
+    predicate: "make_create"
+    returns: "EVENT"
+    roles:
+      agent: {type: "ENTITY"}
+      product: {type: "ARTIFACT"}
+    constraints:
+      - id: "MAKE_CREATE_PRODUCT_ARTIFACT"
+        must_hold:
+          type_is: ["product", "ARTIFACT"]
+    tags: ["general"]
+
+  - sense_id: "V::make::02"
+    lemma: "make"
+    surface_forms: ["make", "makes", "made"]
+    predicate: "make_build"
+    returns: "EVENT"
+    roles:
+      agent: {type: "ENTITY"}
+      theme: {type: "ARTIFACT"}
+    constraints:
+      - id: "MAKE_BUILD_THEME_ARTIFACT"
+        must_hold:
+          type_is: ["theme", "ARTIFACT"]
+    tags: ["general"]
+
+  - sense_id: "V::make::03"
+    lemma: "make"
+    surface_forms: ["make", "makes", "made"]
+    predicate: "make_turn_into"
+    returns: "EVENT"
+    roles:
+      agent: {type: "ENTITY", optional: true}
+      patient: {type: "ENTITY"}
+      result: {type: "ENTITY"}
+    constraints: []
+    tags: ["general"]
+
+  # like: similarity vs enjoy
+  - sense_id: "P::like::01"
+    lemma: "like"
+    surface_forms: ["like"]
+    predicate: "like_similarity"
+    returns: "EVENT"
+    roles:
+      x: {type: "ENTITY"}
+      y: {type: "ENTITY"}
+    constraints: []
+    tags: ["general"]
+
+  - sense_id: "V::like::01"
+    lemma: "like"
+    surface_forms: ["like", "likes", "liked"]
+    predicate: "like_enjoy"
+    returns: "EVENT"
+    roles:
+      experiencer: {type: "PERSON"}
+      theme: {type: "ENTITY"}
+    constraints: []
+    tags: ["general"]
+
+# -------------------------
+# Profiles
+# -------------------------
+profiles:
+  English/general1:
+    inherits: []
+    enable_relaxation_rules: ["DEG_FRUIT_TO_RED_THING_APPLE_ONLY"]
+    strict_metaphor: false
+
+  English/finance:
+    inherits: ["English/general1"]
+    enable_relaxation_rules: []
+    strict_metaphor: true
+
+  English/poetry:
+    inherits: ["English/general1"]
+    enable_relaxation_rules: ["DEG_FRUIT_TO_RED_THING_APPLE_ONLY"]
+    strict_metaphor: false
+
+  English/medical:
+    inherits: ["English/general1"]
+    enable_relaxation_rules: []
+    strict_metaphor: true
