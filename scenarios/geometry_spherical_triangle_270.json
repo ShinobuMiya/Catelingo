@@ -1,0 +1,19 @@
+{
+  "id": "spherical_triangle_270",
+  "profile": "English/general1",
+  "facts": [
+    {
+      "predicate": "triangle_angle_sum",
+      "args": {
+        "value": 270,
+        "geometry": "spherical"
+      }
+    }
+  ],
+  "expected": {
+    "tri": "SAT",
+    "must_not_include_constraints": [
+      "EUCLIDEAN_TRIANGLE_ANGLE_SUM"
+    ]
+  }
+}

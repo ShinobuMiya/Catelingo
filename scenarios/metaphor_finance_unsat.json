@@ -1,0 +1,31 @@
+{
+  "id": "metaphor_finance_unsat_apple_cheek",
+  "profile": "English/finance",
+  "facts": [
+    {
+      "predicate": "cheek",
+      "args": {
+        "entity": { "id": "cheek_1", "type": "CHEEK" }
+      }
+    },
+    {
+      "predicate": "make_turn_into",
+      "args": {
+        "patient": { "id": "cheek_1", "type": "CHEEK" },
+        "result": { "id": "apple_1", "type": "FRUIT", "lexeme": "apple" }
+      }
+    }
+  ],
+  "meta": {
+    "note": "Finance profile is strict (no metaphor relaxation). The cheek-metaphor trigger requires result type RED_THING, so FRUIT('apple') fails => UNSAT."
+  },
+  "expected": {
+    "tri": "UNSAT",
+    "must_include_constraints": [
+      "MAKE_TURN_INTO_CHEEK_RESULT_RED_THING"
+    ],
+    "must_not_include_constraints": [
+      "DEG_FRUIT_TO_RED_THING_APPLE_ONLY"
+    ]
+  }
+}

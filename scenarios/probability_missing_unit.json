@@ -1,0 +1,18 @@
+{
+  "id": "numerical_probability_missing_unit",
+  "profile": "English/general1",
+  "facts": [
+    {
+      "predicate": "probability_value",
+      "args": {
+        "value": 0.42
+      }
+    }
+  ],
+  "expected": {
+    "tri": "UNKNOWN",
+    "must_include_constraints": [
+      "RANGE_PROBABILITY_0_1"
+    ]
+  }
+}

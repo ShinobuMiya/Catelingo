@@ -1,0 +1,22 @@
+{
+  "id": "PAPER_SEM_UNSAT_MONARCHY_OF_BANANA",
+  "title": "UNSAT when monarchy(of=BANANA) violates type_is PERSON",
+  "context": {
+    "note": "BIOLOGICAL_INCOMPATIBILITY requires monarchy.of to be PERSON."
+  },
+  "profile": "English/general",
+  "facts": [
+    {
+      "predicate": "banana",
+      "args": { "entity": "x" }
+    },
+    {
+      "predicate": "monarchy",
+      "args": { "of": "x" }
+    }
+  ],
+  "expected": {
+    "tri": "UNSAT",
+    "must_include_constraints": ["BIOLOGICAL_INCOMPATIBILITY"]
+  }
+}

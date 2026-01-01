@@ -1,0 +1,20 @@
+{
+  "id": "metaphor_autumn_cheek_like_apple",
+  "profile": "English/poetic",
+  "facts": [
+    {
+      "predicate": "metaphor_like",
+      "args": {
+        "subject": { "id": "her_cheek", "type": "CHEEK" },
+        "object": { "id": "autumn_apple", "type": "FRUIT" }
+      }
+    }
+  ],
+  "expected": {
+    "tri": "SAT",
+    "must_not_include_constraints": [
+      "TYPE_IDENTITY_VIOLATION",
+      "PHYSICAL_IMPOSSIBILITY"
+    ]
+  }
+}

@@ -1,0 +1,21 @@
+{
+  "id": "euclidean_triangle_360",
+  "profile": "English/general1",
+  "facts": [
+    {
+      "predicate": "assumption",
+      "args": { "name": "geometry", "value": "euclidean" }
+    },
+    {
+      "predicate": "triangle_angle_sum",
+      "args": {
+        "triangle": { "id": "tri_1", "type": "ENTITY" },
+        "sum_deg": 360
+      }
+    }
+  ],
+  "expected": {
+    "tri": "UNSAT",
+    "must_include_constraints": ["EUCLIDEAN_TRIANGLE_ANGLE_SUM"]
+  }
+}

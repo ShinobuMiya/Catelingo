@@ -1,0 +1,28 @@
+{
+  "id": "temporal_nogo_wwi",
+  "profile": "English/general1",
+  "facts": [
+    {
+      "predicate": "construct",
+      "args": {
+        "theme": { "id": "eiffel_tower", "type": "ARTIFACT" },
+        "time": 1889
+      }
+    },
+    {
+      "predicate": "commemorate",
+      "args": {
+        "carrier": { "id": "eiffel_tower", "type": "ARTIFACT" },
+        "event": { "id": "world_war_i", "type": "EVENT" },
+        "event_time": 1914
+      }
+    }
+  ],
+  "meta": {
+    "note": "Input layer supplies event_time; Catelingo verifies only constraints."
+  },
+  "expected": {
+    "tri": "UNSAT",
+    "must_include_constraints": ["TEMP_CONSTRUCT_AFTER_EVENT"]
+  }
+}

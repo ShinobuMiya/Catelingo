@@ -1,0 +1,29 @@
+{
+  "id": "metaphor_poetry_sat_apple_cheek",
+  "profile": "English/poetry",
+  "facts": [
+    {
+      "predicate": "cheek",
+      "args": {
+        "entity": { "id": "cheek_1", "type": "CHEEK" }
+      }
+    },
+    {
+      "predicate": "make_turn_into",
+      "args": {
+        "patient": { "id": "cheek_1", "type": "CHEEK" },
+        "result": { "id": "apple_1", "type": "FRUIT", "lexeme": "apple" }
+      }
+    }
+  ],
+  "meta": {
+    "note": "Poetry profile enables DEG_FRUIT_TO_RED_THING_APPLE_ONLY, so FRUIT('apple') can satisfy required RED_THING result for cheek-metaphor trigger."
+  },
+  "expected": {
+    "tri": "SAT",
+    "must_include_constraints": [
+      "MAKE_TURN_INTO_CHEEK_RESULT_RED_THING",
+      "DEG_FRUIT_TO_RED_THING_APPLE_ONLY"
+    ]
+  }
+}

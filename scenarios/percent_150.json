@@ -1,0 +1,19 @@
+{
+  "id": "percent_value_150",
+  "profile": "English/general1",
+  "facts": [
+    {
+      "predicate": "percent_value",
+      "args": {
+        "value": 150.0,
+        "unit": "percent"
+      }
+    }
+  ],
+  "expected": {
+    "tri": "UNSAT",
+    "must_include_constraints": [
+      "RANGE_PERCENT_0_100"
+    ]
+  }
+}

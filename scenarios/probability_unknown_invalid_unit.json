@@ -1,0 +1,18 @@
+{
+  "id": "PAPER_PROB_UNKNOWN_INVALID_UNIT",
+  "title": "Probability UNKNOWN when unit is invalid",
+  "context": {
+    "note": "RANGE_PROBABILITY_0_1 says: if unit missing/invalid => UNKNOWN (not UNSAT)."
+  },
+  "profile": "English/general",
+  "facts": [
+    {
+      "predicate": "probability_value",
+      "args": { "value": 0.7, "unit": "bogus_unit" }
+    }
+  ],
+  "expected": {
+    "tri": "UNKNOWN",
+    "must_include_constraints": ["RANGE_PROBABILITY_0_1"]
+  }
+}

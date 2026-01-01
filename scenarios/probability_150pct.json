@@ -1,0 +1,19 @@
+{
+  "id": "numerical_probability_150pct",
+  "profile": "English/general1",
+  "facts": [
+    {
+      "predicate": "probability_value",
+      "args": {
+        "value": 150.0,
+        "unit": "percent"
+      }
+    }
+  ],
+  "expected": {
+    "tri": "UNSAT",
+    "must_include_constraints": [
+      "RANGE_PROBABILITY_0_1"
+    ]
+  }
+}
