@@ -5,9 +5,7 @@ It detects *semantic no-go cases*—sentences that are syntactically fluent but 
 
 This repository provides a **toy implementation** accompanying the paper:
 
-> **Catelingo: Constraint-Based Semantic Validity Verification for Language Models**  
-> Shinobu Miya, 2025  
-> (arXiv preprint)
+[Miya, S. (2026). Catelingo: Constraint-Based Semantic Validity Verification for Language Models (v1.0). Zenodo. https://doi.org/10.5281/zenodo.18148498](https://zenodo.org/records/18148498)
 
 ---
 
@@ -235,12 +233,7 @@ It is **not** intended as a production-ready semantic parser.
 If you use this work, please cite:
 
 ```
-@article{miya2025catelingo,
-title={Catelingo: Constraint-Based Semantic Validity Verification for Language Models},
-author={Miya, Shinobu},
-year={2025},
-journal={arXiv preprint}
-}
+Miya, S. (2026). Catelingo: Constraint-Based Semantic Validity Verification for Language Models (v1.0). Zenodo. https://doi.org/10.5281/zenodo.18148498
 ```
 
 ---
