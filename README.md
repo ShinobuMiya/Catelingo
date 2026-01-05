@@ -1,11 +1,36 @@
 # Catelingo
 
-**Catelingo** is a constraint-based semantic validity verifier for language model outputs.  
-It detects *semantic no-go cases*—sentences that are syntactically fluent but semantically impossible—by checking **explicit semantic constraints**, without relying on reasoning chains, factual knowledge bases, or model retraining.
+**Catelingo is a constraint-based semantic validity checker for LLM outputs.**
 
-This repository provides a **toy implementation** accompanying the paper:
+It rejects *semantically impossible* statements — even when they are fluent and high-likelihood —
+by checking explicit semantic constraints, **without**:
+- chain-of-thought reasoning
+- factual knowledge bases
+- retrieval
+- model retraining
 
-[Miya, S. (2026). Catelingo: Constraint-Based Semantic Validity Verification for Language Models (v1.0). Zenodo. https://doi.org/10.5281/zenodo.18148498](https://zenodo.org/records/18148498)
+Catelingo treats *semantic validity* as a **constraint satisfaction problem**, not a probabilistic one.
+It is designed as a lightweight, post-hoc verification layer that can be applied to any LLM output.
+
+> This repository provides a minimal, reproducible reference implementation.
+
+**Paper:**  
+Miya, S. (2026). *Catelingo: Constraint-Based Semantic Validity Verification for Language Models* (v1.0).  
+Zenodo DOI: https://doi.org/10.5281/zenodo.18148498
+
+## What Catelingo is / is not
+
+**Catelingo is**
+- a semantic *no-go* detector
+- deterministic (given constraints)
+- model-agnostic
+- independent of generation likelihood
+
+**Catelingo is not**
+- a fact checker
+- a reasoning engine
+- a hallucination scorer
+- a replacement for training or alignment
 
 ---
 
