@@ -238,6 +238,23 @@ Miya, S. (2026). Catelingo: Constraint-Based Semantic Validity Verification for 
 
 ---
 
+## Theoretical Background
+
+Catelingo is conceptually grounded in **CPM (Critical Projection and the Geometry of Meaning)**, a formal framework that treats semantic validity as a structural property rather than a probabilistic one.
+
+While CPM provides the abstract geometric and topological foundations, Catelingo focuses on a concrete linguistic layer:  
+explicit semantic constraints, type consistency, and satisfiability over syntactic structures.
+
+In this sense, Catelingo can be viewed as a **language-level specialization** of the broader CPM perspective.
+
+**CPM overview:**  
+https://shinobumiya.github.io/cpm-site/
+
+**CPM preprint (Zenodo DOI):**  
+https://doi.org/10.5281/zenodo.17940349
+
+---
+
 ## License
 
 Apache 2.0 License.
