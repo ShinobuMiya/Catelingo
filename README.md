@@ -50,6 +50,12 @@ They arise from violations of basic semantic constraints.
 
 Catelingo addresses this class of errors by reframing **semantic validity as constraint satisfiability**.
 
+### One-line example
+
+> “John was born in 2010 and died in 2005.”
+
+→ **UNSAT** (temporal ordering violation)
+
 ---
 
 ## Core Idea
