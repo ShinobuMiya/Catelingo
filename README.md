@@ -1,4 +1,5 @@
 # Catelingo
+Catelingo rejects *semantic no-go* outputs from LLMs — cases that are fluent, high-likelihood, but structurally impossible.
 
 **Catelingo is a constraint-based semantic validity checker for LLM outputs.**
 
@@ -31,6 +32,8 @@ Zenodo DOI: https://doi.org/10.5281/zenodo.18148498
 - a reasoning engine
 - a hallucination scorer
 - a replacement for training or alignment
+
+**Where it sits:** Catelingo operates *after* generation, as a post-hoc semantic verifier.
 
 ---
 
