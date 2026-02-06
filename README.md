@@ -285,7 +285,7 @@ In this sense, Catelingo can be viewed as a **language-level specialization** of
 https://shinobumiya.github.io/cpm-site/
 
 **CPM preprint (Zenodo DOI):**  
-https://doi.org/10.5281/zenodo.17940349
+https://doi.org/10.5281/zenodo.18377851
 
 ---
 
